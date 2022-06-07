@@ -38,14 +38,14 @@ function setNumber(number){
 };
 
 function setOperator(op){
+    if (firstNum === '') {
+        this.disabled = true;
+    }
      if (operator === null) {
         selectedOperator.textContent += `${selectedNumbers.textContent} ${op}`;
         operator = op;
         firstNum = selectedNumbers.textContent;
      };
-    //  else (
-
-    //  )
 };
 
 function clear(){
