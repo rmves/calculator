@@ -1,13 +1,11 @@
 body {
     background-color: rgb(114,163,247);
+    margin: 0;
+    padding: 0;
 }
 
 .main {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 75vh;
-    min-height: 500px;
 }
 
 .calculator {
@@ -15,25 +13,84 @@ body {
     height: fit-content;
     width: 500px;
     border-radius: 10px;
+    margin: 45px auto;
 }
 
 #window {
     background-color: rgb(188,190,192);
+    /* background-color: #eee; */
     height: 100px;
     width: 450px;
-    /* border-radius: 10px; */
+    border-radius: 10px;
     margin: 25px;
+    position: relative;
+}
+
+#actions {
+    position: absolute;
+    right: 0;
+    font-size: 32px;
+    margin-right: 10px;
+}
+
+#results {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-size: 54px;
+    margin-right: 10px;
+}
+
+#erase {
+    display: flex;
+    gap: 25px;
+    margin: 25px 25px 0;
+}
+
+#clear {
+    padding: 20px;
+    width: 50%;
+    font-size: 20px;
+    background-color: #faa;
+    text-align: center;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#clear:hover {
+    background-color: #e99;
+}
+
+#delete {
+    padding: 20px;
+    width: 50%;2);
+    font-size: 20px;
+    background-color: #aaf;
+    text-align: center;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#delete:hover {
+    background-color: #99e;
 }
 
 .btn-grid {
     display: grid;
     grid-template-columns: repeat(4,1fr);
     grid-gap: 10px;
-    margin: 25px;
+    margin: 15px 25px 15px;
 }
 
 .btn {
     padding: 20px;
-    background-color: rgb(188,190,192);
     font-size: 20px;
+    background-color: #eee;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+
+.btn:hover {
+    background-color: #ccc;
 }
