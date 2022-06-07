@@ -26,7 +26,7 @@ body {
     position: relative;
 }
 
-#actions {
+#operation {
     position: absolute;
     right: 0;
     font-size: 32px;

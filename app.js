@@ -1,9 +1,9 @@
 let firstNum = '';
 let secondNum = '';
-let operation = null;
-result = '';
+let operator = null;
+let result = '';
 
-const selectedOperator = document.getElementById('actions');
+const selectedOperator = document.getElementById('operation');
 const selectedNumbers = document.getElementById('results');
 const numberBtns = document.querySelectorAll('[data-number]');
 const operatorBtns = document.querySelectorAll('[data-operator');
@@ -13,6 +13,7 @@ const decimalBtn = document.querySelector('#decimal');
 
 clearBtn.addEventListener('click',clear)
 equalsBtn.addEventListener('click',operate)
+decimalBtn.addEventListener('click',() => selectedNumbers.textContent += '.');
 
 numberBtns.forEach((button) => 
     button.addEventListener('click',() => setNumber(button.textContent)));
@@ -23,56 +24,60 @@ operatorBtns.forEach((button) =>
 function setNumber(number){
     if (selectedNumbers.textContent == 0){
         selectedNumbers.textContent = '';
+    }
+    if (result !== '' & operator !== null) { 
+        selectedNumbers.textContent = secondNum;
     };
-    // if (equalsBtn) {
-    //     selectedNumbers.textContent = result;
-    // }
+    if (operator !== null) {
+        secondNum += number;
+        selectedNumbers.textContent = secondNum;
+    }
+    else {
+        selectedNumbers.textContent += number;
+    }
+};
 
-    selectedNumbers.textContent += number;
-}
+function setOperator(op){
+     if (operator === null) {
+        selectedOperator.textContent += `${selectedNumbers.textContent} ${op}`;
+        operator = op;
+        firstNum = selectedNumbers.textContent;
+     };
+    //  else (
 
-function setOperator(operator){
-    selectedOperator.textContent += `${selectedNumbers.textContent} ${operator}`;
-    operation = selectedOperator.textContent;
-    firstNum = selectedNumbers.textContent;
-    operation = operator;
-    // reset();
-}
+    //  )
+};
 
 function clear(){
     selectedNumbers.textContent = 0;
     selectedOperator.textContent = '';
     firstNum = '';
     secondNum = '';
-    operation = null
-}
-
-// function reset() {
-//     if (operation !== null) {
-        
-//     }
-// }
+    operator = null;
+};
 
 // function delete(){
 
 // }
 
-function operate(operator,a,b){
-    a = firstNum;
-    b = secondNum;
-    if (equalsBtn) {
-    if (operation === '+') {
-        result = add(a,b)
+function operate(){
+    if (secondNum !=='') {
+        selectedOperator.textContent = `${firstNum} ${operator} ${secondNum}`
     };
-    if (operation === '-') {
-        result = subtract(a,b)
-    }
-    if (operation === 'X') {
-        result = mulitply(a,b)
-    };
-    if (operation === '÷') {
-        result = divide(a,b)
-    };
+    firstNum = Number(firstNum);
+    secondNum = Number(secondNum);
+    if (operator === '+') {
+        result = add(firstNum,secondNum);
+        selectedNumbers.textContent = Number(result);
+    } else if (operator === '-') {
+        result = subtract(firstNum,secondNum);
+        selectedNumbers.textContent = result;
+    } else if (operator === 'X') {
+        result = mulitply(firstNum,secondNum);
+        selectedNumbers.textContent = result;
+    } else {
+        result = divide(firstNum,secondNum);
+        selectedNumbers.textContent = result;
     };
 };
 
@@ -80,13 +85,13 @@ function add(a,b) {return a+b};
 
 function subtract(a,b) {return a-b};
 
-function mulitply(a,b) {return a*b};
+function mulitply(a,b) {return (a*b).toFixed(14)};
 
 function divide(a,b) {
     if (b=== 0){
-        return "Divide by Zero Danger, Will Robinson"
+        return "Infinity"
     }
     else {
-        return a/b
+        return (a/b).toFixed(14)
         }
 };
