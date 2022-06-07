@@ -85,13 +85,18 @@ function add(a,b) {return a+b};
 
 function subtract(a,b) {return a-b};
 
-function mulitply(a,b) {return (a*b).toFixed(14)};
+function mulitply(a,b) {return (a*b).toFixed(3)};
 
 function divide(a,b) {
     if (b=== 0){
         return "Infinity"
     }
     else {
-        return (a/b).toFixed(14)
+        if (!Number.isInteger(a/b)) {
+            return (a/b).toFixed(3)
+        }
+        else {
+            return (a/b)
+        }
         }
 };
