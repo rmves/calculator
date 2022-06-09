@@ -1,19 +1,21 @@
 let firstNum = '';
 let secondNum = '';
-let operator = null;
-let result = '';
+let currentOperation = null;
+let screenReset = false;
 
-const selectedOperator = document.getElementById('operation');
+const runningOperation = document.getElementById('operation');
 const selectedNumbers = document.getElementById('results');
 const numberBtns = document.querySelectorAll('[data-number]');
 const operatorBtns = document.querySelectorAll('[data-operator');
 const clearBtn = document.querySelector('#clear');
 const equalsBtn = document.querySelector('#equals-btn');
 const decimalBtn = document.querySelector('#decimal');
+const deleteBtn = document.querySelector('#delete');
 
-clearBtn.addEventListener('click',clear)
-equalsBtn.addEventListener('click',operate)
+clearBtn.addEventListener('click',clear);
+equalsBtn.addEventListener('click',eval);
 decimalBtn.addEventListener('click',() => selectedNumbers.textContent += '.');
+deleteBtn.addEventListener('click',deleter);
 
 numberBtns.forEach((button) => 
     button.addEventListener('click',() => setNumber(button.textContent)));
@@ -22,62 +24,57 @@ operatorBtns.forEach((button) =>
     button.addEventListener('click',() => setOperator(button.textContent)))
 
 function setNumber(number){
-    if (selectedNumbers.textContent == 0){
-        selectedNumbers.textContent = '';
-    }
-    if (result !== '' & operator !== null) { 
-        selectedNumbers.textContent = secondNum;
-    };
-    if (operator !== null) {
-        secondNum += number;
-        selectedNumbers.textContent = secondNum;
-    }
-    else {
-        selectedNumbers.textContent += number;
-    }
+    if (selectedNumbers.textContent === '0' || screenReset)
+        resetScreen()
+        selectedNumbers.textContent += number
+};
+
+function resetScreen() {
+    selectedNumbers.textContent = '';
+    screenReset = false;
 };
 
 function setOperator(op){
-    if (firstNum === '') {
-        this.disabled = true;
-    }
-     if (operator === null) {
-        selectedOperator.textContent += `${selectedNumbers.textContent} ${op}`;
-        operator = op;
-        firstNum = selectedNumbers.textContent;
-     };
+    if (selectedNumbers.textContent === '0') return;
+    if (currentOperation !== null) eval();
+    firstNum = selectedNumbers.textContent;
+    currentOperation = op;
+    runningOperation.textContent = `${firstNum} ${currentOperation}`;
+    screenReset = true;
 };
 
 function clear(){
     selectedNumbers.textContent = 0;
-    selectedOperator.textContent = '';
+    runningOperation.textContent = '';
     firstNum = '';
     secondNum = '';
-    operator = null;
+    currentOperation = null;
+    decimalBtn.disabled=false;
 };
 
-// function delete(){
+function deleter() {
+    selectedNumbers.textContent = selectedNumbers.textContent.toString().slice(0,-1);
+}
 
-// }
+function eval(){
+    if (currentOperation === null) return;
+    secondNum = selectedNumbers.textContent;
+    selectedNumbers.textContent = roundResult(operate(currentOperation,firstNum,secondNum))
+    runningOperation.textContent = `${firstNum} ${currentOperation} ${secondNum}`;
+    currentOperation = null;
+};
 
-function operate(){
-    if (secondNum !=='') {
-        selectedOperator.textContent = `${firstNum} ${operator} ${secondNum}`
-    };
-    firstNum = Number(firstNum);
-    secondNum = Number(secondNum);
+function operate(operator,a,b) {
+    a = Number(a);
+    b = Number(b);
     if (operator === '+') {
-        result = add(firstNum,secondNum);
-        selectedNumbers.textContent = Number(result);
+        return add(a,b);
     } else if (operator === '-') {
-        result = subtract(firstNum,secondNum);
-        selectedNumbers.textContent = result;
+        return subtract(a,b);
     } else if (operator === 'X') {
-        result = mulitply(firstNum,secondNum);
-        selectedNumbers.textContent = result;
+        return mulitply(a,b);
     } else {
-        result = divide(firstNum,secondNum);
-        selectedNumbers.textContent = result;
+        return divide(a,b);
     };
 };
 
@@ -85,18 +82,10 @@ function add(a,b) {return a+b};
 
 function subtract(a,b) {return a-b};
 
-function mulitply(a,b) {return (a*b).toFixed(3)};
+function mulitply(a,b) { return a*b };
 
-function divide(a,b) {
-    if (b=== 0){
-        return "Infinity"
-    }
-    else {
-        if (!Number.isInteger(a/b)) {
-            return (a/b).toFixed(3)
-        }
-        else {
-            return (a/b)
-        }
-        }
+function divide(a,b) { return a/b };
+
+function roundResult(number) {
+    return Math.round(( number + Number.EPSILON) * 1000) /1000
 };
